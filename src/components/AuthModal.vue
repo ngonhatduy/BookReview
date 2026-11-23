@@ -374,7 +374,7 @@ async function handleSignOut() {
               <input
                 v-model="displayName"
                 type="text"
-                placeholder="Ví dụ: Minh Anh"
+                placeholder="Ví dụ: Ngoc Tran"
                 class="w-full rounded-lg border border-[#4b3f37] bg-[#241d19] px-3 py-2 text-sm text-[#efe6dc] placeholder-[#7f7063] focus:border-[#e2b866]/70 focus:outline-none"
               />
             </div>
