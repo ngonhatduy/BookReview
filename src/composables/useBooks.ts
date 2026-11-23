@@ -5,6 +5,8 @@ import type { Book, BookInput } from '../types/book'
 
 const DEMO_STORAGE_KEY = 'bookweb_demo_books_v1'
 const MAX_COVER_SIZE_BYTES = 5 * 1024 * 1024 // 5 MB
+const BOOK_COLUMNS = 'id, title, cover_url, genres, rating, finished_at, shopee_url, created_at'
+const LEGACY_BOOK_COLUMNS = 'id, title, cover_url, genres, rating, finished_at, created_at'
 
 const books = ref<Book[]>([])
 const loading = ref<boolean>(false)
@@ -19,7 +21,10 @@ function loadDemoBooks(): Book[] {
     if (raw) {
       const parsed = JSON.parse(raw)
       if (Array.isArray(parsed)) {
-        return parsed as Book[]
+        return parsed.map((item) => ({
+          ...(item as Book),
+          shopee_url: (item as Partial<Book>).shopee_url ?? null,
+        }))
       }
     }
   } catch {
@@ -59,11 +64,30 @@ export function useBooks() {
     try {
       const { data, error: fetchErr } = await supabase
         .from('books')
-        .select('id, title, cover_url, genres, rating, finished_at, created_at')
+        .select(BOOK_COLUMNS)
         .order('finished_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
 
-      if (fetchErr) throw fetchErr
+      if (fetchErr) {
+        const errCode = (fetchErr as { code?: string }).code
+        if (errCode === '42703' || fetchErr.message.includes('shopee_url')) {
+          const { data: legacyData, error: legacyErr } = await supabase
+            .from('books')
+            .select(LEGACY_BOOK_COLUMNS)
+            .order('finished_at', { ascending: false, nullsFirst: false })
+            .order('created_at', { ascending: false })
+
+          if (legacyErr) throw legacyErr
+          books.value = ((legacyData as Omit<Book, 'shopee_url'>[]) ?? []).map((item) => ({
+            ...item,
+            shopee_url: null,
+          }))
+          loadedOnce = true
+          return
+        }
+        throw fetchErr
+      }
+
       books.value = (data as Book[]) ?? []
       loadedOnce = true
     } catch (err) {
@@ -106,6 +130,7 @@ export function useBooks() {
   }
 
   async function addBook(input: BookInput): Promise<Book> {
+    const cleanShopeeUrl = input.shopee_url?.trim() || null
     if (!supabase) {
       const created: Book = {
         id: `demo-${crypto.randomUUID()}`,
@@ -114,6 +139,7 @@ export function useBooks() {
         genres: input.genres,
         rating: input.rating,
         finished_at: input.finished_at || null,
+        shopee_url: cleanShopeeUrl,
         created_at: new Date().toISOString(),
       }
       books.value = [created, ...books.value]
@@ -129,8 +155,9 @@ export function useBooks() {
         genres: input.genres,
         rating: input.rating,
         finished_at: input.finished_at || null,
+        shopee_url: cleanShopeeUrl,
       })
-      .select('id, title, cover_url, genres, rating, finished_at, created_at')
+      .select(BOOK_COLUMNS)
       .single()
 
     if (insertErr) {
@@ -143,6 +170,7 @@ export function useBooks() {
   }
 
   async function updateBook(id: string, input: BookInput): Promise<Book> {
+    const cleanShopeeUrl = input.shopee_url?.trim() || null
     if (!supabase) {
       const idx = books.value.findIndex((b) => b.id === id)
       if (idx === -1) throw new Error('Không tìm thấy cuốn sách cần sửa.')
@@ -153,6 +181,7 @@ export function useBooks() {
         genres: input.genres,
         rating: input.rating,
         finished_at: input.finished_at || null,
+        shopee_url: cleanShopeeUrl,
       }
       books.value = books.value.map((b) => (b.id === id ? updated : b))
       saveDemoBooks(books.value)
@@ -167,9 +196,10 @@ export function useBooks() {
         genres: input.genres,
         rating: input.rating,
         finished_at: input.finished_at || null,
+        shopee_url: cleanShopeeUrl,
       })
       .eq('id', id)
-      .select('id, title, cover_url, genres, rating, finished_at, created_at')
+      .select(BOOK_COLUMNS)
       .single()
 
     if (updateErr) {

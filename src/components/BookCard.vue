@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { FileText, Pencil, Trash2 } from 'lucide-vue-next'
+import { ExternalLink, FileText, Pencil, ShoppingBag, Trash2 } from 'lucide-vue-next'
 import { getGenreMeta } from '../data/genres'
 import type { Book } from '../types/book'
 import StarRating from './StarRating.vue'
@@ -25,6 +25,12 @@ watch(
 )
 
 const genreItems = computed(() => props.book.genres.map((g) => getGenreMeta(g)))
+
+const safeShopeeUrl = computed(() => {
+  const raw = props.book.shopee_url?.trim()
+  if (!raw) return null
+  return /^https?:\/\//i.test(raw) ? raw : null
+})
 
 const formattedDate = computed(() => {
   if (!props.book.finished_at) return null
@@ -61,11 +67,22 @@ const fallbackPalette = computed(() => {
 <template>
   <article
     class="group relative flex flex-col rounded-xl border border-[#473c35] bg-[#342b26] p-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#5f5046] hover:bg-[#3d332d] hover:shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
+    :class="safeShopeeUrl ? 'cursor-pointer' : ''"
   >
+    <!-- Full-card link to Shopee when configured -->
+    <a
+      v-if="safeShopeeUrl"
+      :href="safeShopeeUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      :aria-label="`Xem ${book.title} trên Shopee`"
+      class="absolute inset-0 z-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#e2b866]/70"
+    />
+
     <!-- Admin actions -->
     <div
       v-if="isAdmin"
-      class="absolute right-2 top-2 z-10 flex items-center gap-1 opacity-100 transition-opacity duration-150 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
+      class="absolute right-2 top-2 z-20 flex items-center gap-1 opacity-100 transition-opacity duration-150 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
     >
       <button
         type="button"
@@ -158,9 +175,19 @@ const fallbackPalette = computed(() => {
         </span>
       </div>
 
-      <!-- Rating & Date pinned to bottom -->
+      <!-- Rating, Shopee indicator & Date pinned to bottom -->
       <div class="mt-auto space-y-1.5 pt-0.5">
-        <StarRating :model-value="book.rating" readonly size="sm" />
+        <div class="flex items-center justify-between gap-2">
+          <StarRating :model-value="book.rating" readonly size="sm" />
+          <span
+            v-if="safeShopeeUrl"
+            class="inline-flex items-center gap-1 rounded border border-[#ee4d2d]/30 bg-[#ee4d2d]/15 px-1.5 py-0.5 text-[10px] font-medium text-[#ff876d]"
+          >
+            <ShoppingBag class="h-2.5 w-2.5" />
+            <span>Shopee</span>
+            <ExternalLink class="h-2.5 w-2.5" />
+          </span>
+        </div>
         <p v-if="formattedDate" class="text-[11px] text-[#9b8c7e]">
           {{ formattedDate }}
         </p>

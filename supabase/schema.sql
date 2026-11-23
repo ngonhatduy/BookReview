@@ -103,8 +103,11 @@ create table if not exists public.books (
   genres text[] not null default '{}',
   rating smallint not null check (rating between 1 and 5),
   finished_at date,
+  shopee_url text,
   created_at timestamptz not null default now()
 );
+
+alter table public.books add column if not exists shopee_url text;
 
 -- 6. Enable Row Level Security (RLS)
 alter table public.profiles enable row level security;

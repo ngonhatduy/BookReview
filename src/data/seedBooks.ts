@@ -8,6 +8,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Detective', 'Puzzle'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-01T10:00:00.000Z',
   },
   {
@@ -17,6 +18,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Fiction', 'Healing', 'Fantasy'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-02T10:00:00.000Z',
   },
   {
@@ -26,6 +28,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Psychology', 'Crime', 'Detective'],
     rating: 5,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-03T10:00:00.000Z',
   },
   {
@@ -35,6 +38,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Crime', 'Psychology'],
     rating: 5,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-04T10:00:00.000Z',
   },
   {
@@ -44,6 +48,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Fiction', 'Healing'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-05T10:00:00.000Z',
   },
   {
@@ -53,6 +58,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Fantasy', 'Fiction'],
     rating: 3,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-06T10:00:00.000Z',
   },
   {
@@ -62,6 +68,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Slice of Life'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-07T10:00:00.000Z',
   },
   {
@@ -71,6 +78,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Slice of Life', 'Healing'],
     rating: 5,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-08T10:00:00.000Z',
   },
   {
@@ -80,6 +88,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Fiction', 'Healing'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-09T10:00:00.000Z',
   },
   {
@@ -89,6 +98,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Slice of Life'],
     rating: 5,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-10T10:00:00.000Z',
   },
   {
@@ -98,6 +108,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Fiction'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-11T10:00:00.000Z',
   },
   {
@@ -107,6 +118,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Fiction'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-12T10:00:00.000Z',
   },
   {
@@ -116,6 +128,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Fiction'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-13T10:00:00.000Z',
   },
   {
@@ -125,6 +138,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Fiction', 'Healing', 'Romance'],
     rating: 3,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-14T10:00:00.000Z',
   },
   {
@@ -134,6 +148,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Food'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-15T10:00:00.000Z',
   },
   {
@@ -143,6 +158,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Food'],
     rating: 4,
     finished_at: null,
+    shopee_url: null,
     created_at: '2026-08-16T10:00:00.000Z',
   },
   {
@@ -152,6 +168,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing', 'Fiction', 'Slice of Life'],
     rating: 3,
     finished_at: '2026-10-23',
+    shopee_url: null,
     created_at: '2026-10-23T10:00:00.000Z',
   },
   {
@@ -161,6 +178,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Healing'],
     rating: 5,
     finished_at: '2026-10-02',
+    shopee_url: null,
     created_at: '2026-10-02T10:00:00.000Z',
   },
   {
@@ -170,6 +188,7 @@ export const SEED_BOOKS: Book[] = [
     genres: ['Fiction', 'Healing', 'Romance'],
     rating: 5,
     finished_at: '2026-09-04',
+    shopee_url: null,
     created_at: '2026-09-04T10:00:00.000Z',
   },
 ]

@@ -5,6 +5,7 @@ export interface Book {
   genres: string[]
   rating: number
   finished_at: string | null
+  shopee_url: string | null
   created_at: string
 }
 
@@ -14,6 +15,7 @@ export interface BookInput {
   genres: string[]
   rating: number
   finished_at: string | null
+  shopee_url: string | null
 }
 
 export type UserRole = 'admin' | 'viewer'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { ImagePlus, Link2, Loader2, Plus, Trash2, X } from 'lucide-vue-next'
+import { ImagePlus, Link2, Loader2, Plus, ShoppingBag, Trash2, X } from 'lucide-vue-next'
 import { useBooks } from '../composables/useBooks'
 import { PRESET_GENRES } from '../data/genres'
 import type { Book, BookInput } from '../types/book'
@@ -26,6 +26,7 @@ const genres = ref<string[]>([])
 const customGenre = ref('')
 const rating = ref(5)
 const finishedAt = ref('')
+const shopeeUrl = ref('')
 const localError = ref<string | null>(null)
 const uploadingCover = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
@@ -43,12 +44,14 @@ watch(
       genres.value = [...currentBook.genres]
       rating.value = currentBook.rating
       finishedAt.value = currentBook.finished_at ?? ''
+      shopeeUrl.value = currentBook.shopee_url ?? ''
     } else {
       title.value = ''
       coverUrl.value = ''
       genres.value = []
       rating.value = 5
       finishedAt.value = ''
+      shopeeUrl.value = ''
     }
     customGenre.value = ''
   },
@@ -112,6 +115,11 @@ function handleSubmit() {
     localError.value = 'Đánh giá phải từ 1 đến 5 sao.'
     return
   }
+  const cleanedShopeeUrl = shopeeUrl.value.trim()
+  if (cleanedShopeeUrl && !/^https?:\/\//i.test(cleanedShopeeUrl)) {
+    localError.value = 'Link Shopee phải bắt đầu bằng http:// hoặc https://'
+    return
+  }
 
   emit('submit', {
     title: title.value.trim(),
@@ -119,6 +127,7 @@ function handleSubmit() {
     genres: genres.value,
     rating: rating.value,
     finished_at: finishedAt.value.trim() || null,
+    shopee_url: cleanedShopeeUrl || null,
   })
 }
 </script>
@@ -304,6 +313,27 @@ function handleSubmit() {
               type="date"
               class="w-full rounded-lg border border-[#4b3f37] bg-[#241d19] px-3 py-2 text-sm text-[#efe6dc] focus:border-[#e2b866]/70 focus:outline-none"
             />
+          </div>
+
+          <!-- Shopee URL -->
+          <div>
+            <label class="mb-1.5 block text-xs font-medium text-[#cbbdb0]">
+              Link Shopee (tùy chọn)
+            </label>
+            <div class="relative">
+              <ShoppingBag
+                class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#ee4d2d]"
+              />
+              <input
+                v-model="shopeeUrl"
+                type="url"
+                placeholder="https://shopee.vn/... hoặc https://s.shopee.vn/..."
+                class="w-full rounded-lg border border-[#4b3f37] bg-[#241d19] py-2 pl-9 pr-3 text-sm text-[#efe6dc] placeholder-[#7f7063] focus:border-[#e2b866]/70 focus:outline-none"
+              />
+            </div>
+            <p class="mt-1 text-[11px] text-[#8b7c6f]">
+              Khi người xem bấm vào thẻ sách sẽ chuyển sang link Shopee này.
+            </p>
           </div>
 
           <!-- Error notice -->
